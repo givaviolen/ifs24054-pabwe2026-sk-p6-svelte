@@ -18,6 +18,7 @@
   }
 </script>
 
+{#if profile}
 <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-100 bg-white px-4" data-testid="navbar">
   <div class="flex items-center gap-3">
     <button type="button" aria-label="Buka menu" onclick={onMenuClick} class="rounded-lg p-2 hover:bg-slate-100 lg:hidden">
@@ -42,3 +43,4 @@
     </button>
   </div>
 </header>
+{/if}
