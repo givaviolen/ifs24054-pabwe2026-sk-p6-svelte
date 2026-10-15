@@ -1,6 +1,6 @@
 import {
   apiDelete, apiGet, apiPost, apiPut, getAccessToken, putAccessToken,
-  removeAccessToken, request, safeCall,
+  removeAccessToken, request, resolveApiBase, safeCall,
 } from "./apiHelper.js";
 
 function stubFetch(body) {
@@ -16,6 +16,12 @@ describe("apiHelper", () => {
     expect(getAccessToken()).toBe("abc");
     removeAccessToken();
     expect(getAccessToken()).toBeNull();
+  });
+
+  it("memakai proxy same-origin hanya di domain Vercel", () => {
+    expect(resolveApiBase("app.vercel.app")).toBe("/delcom-api");
+    expect(resolveApiBase("app.s1if.cloud")).toBe(DELCOM_BASEURL);
+    expect(resolveApiBase()).toBe(DELCOM_BASEURL);
   });
 
   it("mengirim GET tanpa token dan tanpa body", async () => {

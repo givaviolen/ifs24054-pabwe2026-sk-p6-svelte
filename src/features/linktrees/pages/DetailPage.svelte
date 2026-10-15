@@ -157,8 +157,8 @@
       <ItemModal linkTreeId={tree.id} item={editingItem} onClose={closeModal} />
     {/if}
   {:else if $linkTreesStore.detailLoading}
-    <p class="text-slate-500" data-testid="detail-loading">Memuat detail...</p>
+    <h1 class="py-10 text-center text-base font-normal text-slate-600" data-testid="detail-loading">Memuat detail...</h1>
   {:else}
-    <p class="text-slate-500" data-testid="detail-error">{$linkTreesStore.error || "Link tree tidak ditemukan."}</p>
+    <h1 class="py-10 text-center text-base font-normal text-slate-600" data-testid="detail-error">{$linkTreesStore.error || "Link tree tidak ditemukan."}</h1>
   {/if}
 </section>

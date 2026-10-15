@@ -1,5 +1,14 @@
 const TOKEN_KEY = "token";
 
+/**
+ * Di Vercel, request API dilewatkan proxy same-origin (/delcom-api, lihat vercel.json)
+ * sehingga halaman tidak melakukan request lintas-origin. Di tempat lain (dev, Nginx)
+ * request langsung ke Delcom API.
+ */
+export function resolveApiBase(hostname = globalThis.location.hostname) {
+  return hostname.endsWith(".vercel.app") ? "/delcom-api" : DELCOM_BASEURL;
+}
+
 export function getAccessToken() {
   return localStorage.getItem(TOKEN_KEY);
 }
@@ -31,7 +40,7 @@ export async function request(path, { method = "GET", body } = {}) {
     payload = JSON.stringify(body);
   }
 
-  const response = await fetch(`${DELCOM_BASEURL}${path}`, {
+  const response = await fetch(`${resolveApiBase()}${path}`, {
     method,
     headers,
     body: payload,
