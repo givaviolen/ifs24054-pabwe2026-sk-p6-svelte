@@ -7,23 +7,23 @@ import UsersPage from "./features/users/pages/UsersPage.svelte";
 import ProfilePage from "./features/users/pages/ProfilePage.svelte";
 import NotFoundPage from "./features/common/pages/NotFoundPage.svelte";
 
-export const currentPath = writable(window.location.pathname);
+export const currentPath = writable(globalThis.location.pathname);
 
 export function navigate(path) {
-  window.history.pushState({}, "", path);
+  globalThis.history.pushState({}, "", path);
   currentPath.set(path);
 }
 
 export function redirect(path) {
-  window.history.replaceState({}, "", path);
+  globalThis.history.replaceState({}, "", path);
   currentPath.set(path);
 }
 
 export function initRouter() {
-  const sync = () => currentPath.set(window.location.pathname);
-  window.addEventListener("popstate", sync);
+  const sync = () => currentPath.set(globalThis.location.pathname);
+  globalThis.addEventListener("popstate", sync);
   sync();
-  return () => window.removeEventListener("popstate", sync);
+  return () => globalThis.removeEventListener("popstate", sync);
 }
 
 export function handleLinkClick(event, path) {
