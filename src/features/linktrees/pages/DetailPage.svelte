@@ -27,6 +27,10 @@
     linkTreesStore.fetchLinkTree(params.linkTreeId);
   });
 
+  function treeMeta(value) {
+    return `${TYPE_LABELS[value.type]} · dibuat ${formatDate(value.created_at)}`;
+  }
+
   function closeModal() {
     modal = null;
     editingItem = null;
@@ -87,7 +91,7 @@
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h1 class="text-2xl font-extrabold">{tree.title}</h1>
-            <p class="text-sm text-slate-500">{TYPE_LABELS[tree.type]} · dibuat {formatDate(tree.created_at)}</p>
+            <p class="text-sm text-slate-500">{treeMeta(tree)}</p>
           </div>
           {#if isOwner}
             <div class="flex flex-wrap gap-2" data-testid="owner-actions">

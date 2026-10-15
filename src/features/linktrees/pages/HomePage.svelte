@@ -24,6 +24,7 @@
   const profileId = $derived($authStore.profile.id);
   const filtered = $derived(filterLinkTrees($linkTreesStore.linkTrees, { query, onlyMine, profileId }));
   const stats = $derived(getLinkTreeStats($linkTreesStore.linkTrees, profileId));
+  const mineLabel = $derived(`Milik saya (${stats.mine})`);
   const statCards = $derived([
     { label: "Total", value: stats.total, icon: Link2 },
     { label: "Publik", value: stats.public, icon: Globe },
@@ -34,6 +35,10 @@
   onMount(() => {
     linkTreesStore.fetchLinkTrees();
   });
+
+  function itemMeta(item) {
+    return `${TYPE_LABELS[item.type]} · ${formatDate(item.created_at)}`;
+  }
 
   function report(result, successMessage) {
     if (result.success) {
@@ -100,7 +105,8 @@
         class="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 outline-none focus:border-indigo-500" />
     </div>
     <label class="flex items-center gap-2 text-sm font-medium">
-      <input type="checkbox" bind:checked={onlyMine} /> Milik saya ({stats.mine})
+      <input type="checkbox" bind:checked={onlyMine} />
+      <span>{mineLabel}</span>
     </label>
   </div>
 
@@ -122,7 +128,7 @@
             {/if}
             <div class="p-4">
               <p class="truncate font-bold">{item.title}</p>
-              <p class="mt-1 text-xs text-slate-500">{TYPE_LABELS[item.type]} · {formatDate(item.created_at)}</p>
+              <p class="mt-1 text-xs text-slate-500">{itemMeta(item)}</p>
             </div>
           </a>
           {#if item.user_id === profileId}

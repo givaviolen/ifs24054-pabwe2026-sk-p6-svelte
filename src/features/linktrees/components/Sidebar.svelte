@@ -36,7 +36,7 @@
         aria-current={active ? "page" : undefined}
         class="flex items-center gap-3 rounded-xl px-3 py-2.5 font-medium {active ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-50'}">
         <Icon size={18} />
-        {menu.label}
+        <span>{menu.label}</span>
       </a>
     {/each}
   </nav>
