@@ -17,10 +17,24 @@ describe("UsersPage", () => {
   });
 
   it("menampilkan daftar pengguna dengan foto atau inisial", async () => {
-    renderWithProviders(UsersPage);
+    const { container } = renderWithProviders(UsersPage);
     expect(await screen.findAllByTestId("user-item")).toHaveLength(2);
-    expect(screen.getByAltText("Ani")).toBeInTheDocument();
+    expect(container.querySelector("img")).toHaveAttribute("src", "http://img/ani.png");
     expect(screen.getByText("B")).toBeInTheDocument();
+  });
+
+  it("memakai inisial untuk URL root dan melengkapi path relatif", async () => {
+    getUsers.mockResolvedValue([
+      { id: 3, name: "Citra", email: "c@x.com", photo: "http://localhost:8000/" },
+      { id: 4, name: "Dewi", email: "d@x.com", photo: "img/dewi.png" },
+    ]);
+    const { container } = renderWithProviders(UsersPage);
+    expect(await screen.findAllByTestId("user-item")).toHaveLength(2);
+
+    expect(screen.getByText("C")).toBeInTheDocument();
+    const images = container.querySelectorAll("img");
+    expect(images).toHaveLength(1);
+    expect(images[0]).toHaveAttribute("src", `${new URL(DELCOM_BASEURL).origin}/img/dewi.png`);
   });
 
   it("menampilkan status memuat", async () => {

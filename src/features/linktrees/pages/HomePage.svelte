@@ -12,6 +12,8 @@
   import { handleLinkClick } from "../../../router.js";
   import {
     formatDate,
+    hasImage,
+    resolveAssetUrl,
     showConfirmDialog,
     showErrorDialog,
     showSuccessDialog,
@@ -117,10 +119,11 @@
   {:else}
     <ul class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
       {#each filtered as item (item.id)}
+        {@const cover = resolveAssetUrl(item.cover)}
         <li class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm" data-testid="linktree-item">
           <a href={`/link-trees/${item.id}`} onclick={(event) => handleLinkClick(event, `/link-trees/${item.id}`)} class="block">
-            {#if item.cover}
-              <img src={item.cover} alt={item.title} class="h-32 w-full object-cover" />
+            {#if hasImage(cover)}
+              <img src={cover} alt={`Sampul ${item.title}`} class="h-32 w-full object-cover" />
             {:else}
               <div class="flex h-32 items-center justify-center bg-gradient-to-br from-indigo-500 to-sky-400 text-white">
                 <Link2 size={32} />

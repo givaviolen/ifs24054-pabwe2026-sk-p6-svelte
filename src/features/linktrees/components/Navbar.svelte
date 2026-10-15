@@ -2,7 +2,7 @@
   import { LogOut, Link2, Menu } from "lucide-svelte";
   import { authStore } from "../../auth/states/authStore.js";
   import { handleLinkClick, redirect } from "../../../router.js";
-  import { showConfirmDialog } from "../../../helpers/toolsHelper.js";
+  import { hasImage, resolveAssetUrl, showConfirmDialog } from "../../../helpers/toolsHelper.js";
 
   let { onMenuClick } = $props();
 
@@ -19,6 +19,7 @@
 </script>
 
 {#if profile}
+{@const photo = resolveAssetUrl(profile.photo)}
 <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-100 bg-white px-4" data-testid="navbar">
   <div class="flex items-center gap-3">
     <button type="button" aria-label="Buka menu" onclick={onMenuClick} class="rounded-lg p-2 hover:bg-slate-100 lg:hidden">
@@ -31,8 +32,8 @@
   </div>
   <div class="flex items-center gap-3">
     <span class="hidden text-sm font-medium sm:inline" data-testid="navbar-name">{profile.name}</span>
-    {#if profile.photo}
-      <img src={profile.photo} alt={profile.name} class="h-9 w-9 rounded-full object-cover" data-testid="navbar-photo" />
+    {#if hasImage(photo)}
+      <img src={photo} alt="" class="h-9 w-9 rounded-full object-cover" data-testid="navbar-photo" />
     {:else}
       <span class="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-100 font-bold text-indigo-700" data-testid="navbar-initial">
         {profile.name.charAt(0).toUpperCase()}

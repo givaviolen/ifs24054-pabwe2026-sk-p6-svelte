@@ -10,6 +10,8 @@
   import { handleLinkClick, navigate } from "../../../router.js";
   import {
     formatDate,
+    hasImage,
+    resolveAssetUrl,
     showConfirmDialog,
     showErrorDialog,
     showSuccessDialog,
@@ -81,9 +83,10 @@
 
   {#if tree}
     {@const isOwner = tree.user_id === $authStore.profile.id}
+    {@const cover = resolveAssetUrl(tree.cover)}
     <div class="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
-      {#if tree.cover}
-        <img src={tree.cover} alt={tree.title} class="h-48 w-full object-cover" data-testid="detail-cover" />
+      {#if hasImage(cover)}
+        <img src={cover} alt={`Sampul ${tree.title}`} class="h-48 w-full object-cover" data-testid="detail-cover" />
       {:else}
         <div class="h-48 bg-gradient-to-br from-indigo-500 to-sky-400" data-testid="detail-cover-placeholder"></div>
       {/if}

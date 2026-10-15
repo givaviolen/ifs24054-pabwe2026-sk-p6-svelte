@@ -1,6 +1,12 @@
 import Swal from "sweetalert2";
 import {
-  formatDate, showConfirmDialog, showErrorDialog, showSuccessDialog, showWarningDialog,
+  formatDate,
+  hasImage,
+  resolveAssetUrl,
+  showConfirmDialog,
+  showErrorDialog,
+  showSuccessDialog,
+  showWarningDialog,
 } from "./toolsHelper.js";
 
 vi.mock("sweetalert2", () => ({ default: { fire: vi.fn() } }));
@@ -31,5 +37,21 @@ describe("toolsHelper", () => {
   it("memformat tanggal dan menangani nilai kosong", () => {
     expect(formatDate(null)).toBe("-");
     expect(formatDate("2026-03-05T12:00:00Z")).toMatch(/2026/);
+  });
+
+  it("resolveAssetUrl mengubah path relatif menjadi URL absolut", () => {
+    const origin = new URL(DELCOM_BASEURL).origin;
+    expect(resolveAssetUrl("")).toBe("");
+    expect(resolveAssetUrl(null)).toBe("");
+    expect(resolveAssetUrl("https://x.test/a.png")).toBe("https://x.test/a.png");
+    expect(resolveAssetUrl("img/a.png")).toBe(`${origin}/img/a.png`);
+    expect(resolveAssetUrl("/img/a.png")).toBe(`${origin}/img/a.png`);
+  });
+
+  it("hasImage menganggap URL kosong atau URL root sebagai tidak ada gambar", () => {
+    expect(hasImage(undefined)).toBe(false);
+    expect(hasImage("")).toBe(false);
+    expect(hasImage("http://localhost:8000/")).toBe(false);
+    expect(hasImage("http://localhost:8000/img/a.png")).toBe(true);
   });
 });

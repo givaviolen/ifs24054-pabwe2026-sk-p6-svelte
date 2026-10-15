@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { Search } from "lucide-svelte";
   import { userStore } from "../states/userStore.js";
+  import { hasImage, resolveAssetUrl } from "../../../helpers/toolsHelper.js";
 
   let query = $state("");
 
@@ -38,9 +39,10 @@
   {:else}
     <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {#each filtered as user (user.id)}
+        {@const photo = resolveAssetUrl(user.photo)}
         <li class="flex items-center gap-3 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm" data-testid="user-item">
-          {#if user.photo}
-            <img src={user.photo} alt={user.name} class="h-12 w-12 rounded-full object-cover" />
+          {#if hasImage(photo)}
+            <img src={photo} alt="" class="h-12 w-12 rounded-full object-cover" />
           {:else}
             <span class="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 font-bold text-indigo-700">
               {user.name.charAt(0).toUpperCase()}

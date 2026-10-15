@@ -7,15 +7,30 @@ async function fire(options) {
 }
 
 export function showSuccessDialog(text) {
-  return fire({ icon: "success", title: "Berhasil", text, confirmButtonColor: CONFIRM_COLOR });
+  return fire({
+    icon: "success",
+    title: "Berhasil",
+    text,
+    confirmButtonColor: CONFIRM_COLOR,
+  });
 }
 
 export function showErrorDialog(text) {
-  return fire({ icon: "error", title: "Gagal", text, confirmButtonColor: CONFIRM_COLOR });
+  return fire({
+    icon: "error",
+    title: "Gagal",
+    text,
+    confirmButtonColor: CONFIRM_COLOR,
+  });
 }
 
 export function showWarningDialog(text) {
-  return fire({ icon: "warning", title: "Perhatian", text, confirmButtonColor: CONFIRM_COLOR });
+  return fire({
+    icon: "warning",
+    title: "Perhatian",
+    text,
+    confirmButtonColor: CONFIRM_COLOR,
+  });
 }
 
 export async function showConfirmDialog(title, text, confirmText) {
@@ -40,4 +55,20 @@ export function formatDate(value) {
     month: "long",
     year: "numeric",
   });
+}
+
+/** Ubah path relatif dari API (mis. img/profile/1.png) menjadi URL absolut. */
+export function resolveAssetUrl(path) {
+  if (!path) {
+    return "";
+  }
+  if (/^https?:\/\//.test(path)) {
+    return path;
+  }
+  return `${new URL(DELCOM_BASEURL).origin}/${path.replace(/^\//, "")}`;
+}
+
+/** API mengembalikan URL root saat gambar kosong, jadi dianggap tidak ada gambar. */
+export function hasImage(url) {
+  return Boolean(url) && !url.endsWith("/");
 }

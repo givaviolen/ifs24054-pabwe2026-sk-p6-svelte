@@ -18,7 +18,7 @@ vi.mock("../../../helpers/toolsHelper.js", async (importOriginal) => ({
 const trees = [
   { id: "a", user_id: "u1", title: "Alpha", type: "public", cover: "http://img/a.png", created_at: "2026-01-02T12:00:00Z" },
   { id: "b", user_id: "u2", title: "Beta", type: "unlisted", cover: null, created_at: "2026-01-03T12:00:00Z" },
-  { id: "c", user_id: "u1", title: "Gamma", type: "private", cover: null, created_at: "2026-01-04T12:00:00Z" },
+  { id: "c", user_id: "u1", title: "Gamma", type: "private", cover: "http://localhost:8000/", created_at: "2026-01-04T12:00:00Z" },
 ];
 
 function renderHome() {
@@ -32,9 +32,10 @@ describe("HomePage", () => {
   });
 
   it("menampilkan daftar, sampul, placeholder, dan statistik", async () => {
-    renderHome();
+    const { container } = renderHome();
     expect(await screen.findAllByTestId("linktree-item")).toHaveLength(3);
-    expect(screen.getByAltText("Alpha")).toBeInTheDocument();
+    expect(screen.getByAltText("Sampul Alpha")).toBeInTheDocument();
+    expect(container.querySelectorAll("img")).toHaveLength(1);
 
     const stats = screen.getByTestId("stats");
     expect(within(stats).getByText("3")).toBeInTheDocument();

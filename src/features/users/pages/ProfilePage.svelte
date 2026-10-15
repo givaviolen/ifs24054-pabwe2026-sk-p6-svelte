@@ -3,6 +3,8 @@
   import { authStore } from "../../auth/states/authStore.js";
   import { userStore } from "../states/userStore.js";
   import {
+    hasImage,
+    resolveAssetUrl,
     showErrorDialog,
     showSuccessDialog,
     showWarningDialog,
@@ -16,6 +18,7 @@
   let photo = $state(null);
 
   const profile = $derived($authStore.profile);
+  const photoUrl = $derived(resolveAssetUrl(profile.photo));
 
   function report(result, successMessage) {
     if (result.success) {
@@ -70,8 +73,8 @@
   </div>
 
   <div class="flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-    {#if profile.photo}
-      <img src={profile.photo} alt={profile.name} class="h-16 w-16 rounded-full object-cover" data-testid="profile-photo" />
+    {#if hasImage(photoUrl)}
+      <img src={photoUrl} alt="" class="h-16 w-16 rounded-full object-cover" data-testid="profile-photo" />
     {:else}
       <span class="flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100 text-2xl font-bold text-indigo-700" data-testid="profile-initial">
         {profile.name.charAt(0).toUpperCase()}
