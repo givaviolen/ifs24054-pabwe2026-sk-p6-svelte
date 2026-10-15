@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       DELCOM_BASEURL: JSON.stringify(
-        env.VITE_DELCOM_BASEURL || "https://open-api.delcom.org/api/v1"
+        env.VITE_DELCOM_BASEURL || "http://localhost:8000/api/v1"
       ),
     },
     test: {
@@ -41,6 +41,7 @@ export default defineConfig(({ mode }) => {
           "src/main.js",
           "src/setupTests.js",
           "src/test-utils.js",
+          "src/test-stubs/**",
           "**/*.test.{js,jsx}",
           "node_modules/**",
           ".docs/**",
