@@ -1,14 +1,26 @@
 <script>
   import { onMount } from "svelte";
-  import Editor from "@toast-ui/editor";
-  import "@toast-ui/editor/dist/toastui-editor.css";
 
   let { value } = $props();
   let element;
 
   onMount(() => {
-    const viewer = Editor.factory({ el: element, viewer: true, initialValue: value });
-    return () => viewer.destroy();
+    let viewer;
+    let active = true;
+
+    (async () => {
+      const [{ default: Editor }] = await Promise.all([
+        import("@toast-ui/editor"),
+        import("@toast-ui/editor/dist/toastui-editor.css"),
+      ]);
+      viewer = Editor.factory({ el: element, viewer: true, initialValue: value });
+      if (!active) viewer.destroy();
+    })();
+
+    return () => {
+      active = false;
+      viewer?.destroy();
+    };
   });
 </script>
 

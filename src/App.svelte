@@ -30,7 +30,7 @@
     <Page params={route.params} />
   </Layout>
 {:else}
-  <div class="flex min-h-screen items-center justify-center text-slate-500" data-testid="app-loading">
+  <main class="flex min-h-screen items-center justify-center text-slate-500" data-testid="app-loading">
     Memuat aplikasi...
-  </div>
+  </main>
 {/if}

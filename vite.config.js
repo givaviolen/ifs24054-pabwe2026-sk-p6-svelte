@@ -4,6 +4,28 @@ import { svelteTesting } from "@testing-library/svelte/vite";
 import tailwindcss from "@tailwindcss/vite";
 import process from "process";
 
+function inlineCss() {
+  return {
+    name: "inline-css",
+    apply: "build",
+    enforce: "post",
+    transformIndexHtml: {
+      order: "post",
+      handler(html, ctx) {
+        if (!ctx.bundle) return html;
+        let out = html;
+        for (const [file, chunk] of Object.entries(ctx.bundle)) {
+          if (!file.endsWith(".css") || chunk.type !== "asset") continue;
+          const escaped = file.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+          const linkTag = new RegExp(`<link[^>]*href="[^"]*${escaped}"[^>]*>`);
+          out = out.replace(linkTag, () => `<style>${chunk.source}</style>`);
+        }
+        return out;
+      },
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
@@ -14,6 +36,7 @@ export default defineConfig(({ mode }) => {
       }),
       tailwindcss(),
       svelteTesting(),
+      inlineCss(),
     ],
     server: {
       port: Number(env.APP_PORT) || 3004,
@@ -23,6 +46,8 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       chunkSizeWarningLimit: 1500,
+      sourcemap: true,
+      target: "esnext",
     },
     define: {
       DELCOM_BASEURL: JSON.stringify(

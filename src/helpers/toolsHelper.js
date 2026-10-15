@@ -1,37 +1,25 @@
-import Swal from "sweetalert2";
-
 const CONFIRM_COLOR = "#4f46e5";
 const DANGER_COLOR = "#dc2626";
 
+async function fire(options) {
+  const { default: Swal } = await import("sweetalert2");
+  return Swal.fire(options);
+}
+
 export function showSuccessDialog(text) {
-  return Swal.fire({
-    icon: "success",
-    title: "Berhasil",
-    text,
-    confirmButtonColor: CONFIRM_COLOR,
-  });
+  return fire({ icon: "success", title: "Berhasil", text, confirmButtonColor: CONFIRM_COLOR });
 }
 
 export function showErrorDialog(text) {
-  return Swal.fire({
-    icon: "error",
-    title: "Gagal",
-    text,
-    confirmButtonColor: CONFIRM_COLOR,
-  });
+  return fire({ icon: "error", title: "Gagal", text, confirmButtonColor: CONFIRM_COLOR });
 }
 
 export function showWarningDialog(text) {
-  return Swal.fire({
-    icon: "warning",
-    title: "Perhatian",
-    text,
-    confirmButtonColor: CONFIRM_COLOR,
-  });
+  return fire({ icon: "warning", title: "Perhatian", text, confirmButtonColor: CONFIRM_COLOR });
 }
 
 export async function showConfirmDialog(title, text, confirmText) {
-  const result = await Swal.fire({
+  const result = await fire({
     icon: "warning",
     title,
     text,

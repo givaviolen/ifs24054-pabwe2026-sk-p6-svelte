@@ -1,24 +1,36 @@
 <script>
   import { onMount } from "svelte";
-  import Editor from "@toast-ui/editor";
-  import "@toast-ui/editor/dist/toastui-editor.css";
 
   let { value, onchange } = $props();
   let element;
 
   onMount(() => {
-    const editor = new Editor({
-      el: element,
-      height: "220px",
-      initialEditType: "wysiwyg",
-      previewStyle: "vertical",
-      usageStatistics: false,
-      initialValue: value,
-      events: {
-        change: () => onchange(editor.getMarkdown()),
-      },
-    });
-    return () => editor.destroy();
+    let editor;
+    let active = true;
+
+    (async () => {
+      const [{ default: Editor }] = await Promise.all([
+        import("@toast-ui/editor"),
+        import("@toast-ui/editor/dist/toastui-editor.css"),
+      ]);
+      editor = new Editor({
+        el: element,
+        height: "220px",
+        initialEditType: "wysiwyg",
+        previewStyle: "vertical",
+        usageStatistics: false,
+        initialValue: value,
+        events: {
+          change: () => onchange(editor.getMarkdown()),
+        },
+      });
+      if (!active) editor.destroy();
+    })();
+
+    return () => {
+      active = false;
+      editor?.destroy();
+    };
   });
 </script>
 
