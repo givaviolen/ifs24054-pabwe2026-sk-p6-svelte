@@ -2,7 +2,7 @@ import { fireEvent, screen, waitFor } from "@testing-library/svelte";
 import ChangeModal from "./ChangeModal.svelte";
 import { getLinkTree, updateLinkTree } from "../api/linkTreeApi.js";
 import { showErrorDialog, showSuccessDialog } from "../../../helpers/toolsHelper.js";
-import { renderWithProviders } from "../../../test-utils.js";
+import { renderWithProviders, waitForEditor } from "../../../test-utils.js";
 
 vi.mock("../api/linkTreeApi.js");
 vi.mock("../../../helpers/toolsHelper.js", async (importOriginal) => ({
@@ -30,8 +30,8 @@ describe("ChangeModal", () => {
     renderWithProviders(ChangeModal, { props: { linkTree, onClose: vi.fn() } });
     expect(screen.getByLabelText("Judul")).toHaveValue("Lama");
     expect(screen.getByLabelText("Tipe")).toHaveValue("unlisted");
-    await waitFor(() => expect(globalThis.__toastEditors).toHaveLength(1));
-    expect(globalThis.__toastEditors[0].options.initialValue).toBe("isi lama");
+    const editor = await waitForEditor();
+    expect(editor.options.initialValue).toBe("isi lama");
   });
 
   it("menolak judul kosong", async () => {
@@ -45,8 +45,8 @@ describe("ChangeModal", () => {
     updateLinkTree.mockResolvedValue("ok");
     const onClose = vi.fn();
     renderWithProviders(ChangeModal, { props: { linkTree, onClose } });
-    await waitFor(() => expect(globalThis.__toastEditors).toHaveLength(1));
-    globalThis.__toastEditors[0].options.events.change();
+    const editor = await waitForEditor();
+    editor.options.events.change();
     await submitWith("Baru");
 
     await waitFor(() =>

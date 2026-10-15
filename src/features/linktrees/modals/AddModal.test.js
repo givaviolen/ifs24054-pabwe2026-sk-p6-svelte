@@ -2,7 +2,7 @@ import { fireEvent, screen, waitFor } from "@testing-library/svelte";
 import AddModal from "./AddModal.svelte";
 import { createLinkTree, getLinkTrees } from "../api/linkTreeApi.js";
 import { showErrorDialog, showSuccessDialog } from "../../../helpers/toolsHelper.js";
-import { renderWithProviders } from "../../../test-utils.js";
+import { renderWithProviders, waitForEditor } from "../../../test-utils.js";
 
 vi.mock("../api/linkTreeApi.js");
 vi.mock("../../../helpers/toolsHelper.js", async (importOriginal) => ({
@@ -37,8 +37,8 @@ describe("AddModal", () => {
     renderWithProviders(AddModal, { props: { onClose } });
 
     await fireEvent.change(screen.getByLabelText("Tipe"), { target: { value: "private" } });
-    await waitFor(() => expect(globalThis.__toastEditors).toHaveLength(1));
-    globalThis.__toastEditors[0].options.events.change();
+    const editor = await waitForEditor();
+    editor.options.events.change();
     await submitWith("  Portofolio  ");
 
     await waitFor(() =>

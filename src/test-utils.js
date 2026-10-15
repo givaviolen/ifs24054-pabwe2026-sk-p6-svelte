@@ -1,4 +1,4 @@
-import { render } from "@testing-library/svelte";
+import { render, waitFor } from "@testing-library/svelte";
 import { createRawSnippet } from "svelte";
 import { authState, initialAuthState } from "./features/auth/states/authStore.js";
 import { initialUsersState, usersState } from "./features/users/states/userStore.js";
@@ -49,4 +49,18 @@ export function renderWithProviders(Component, options) {
     linkTreesState.update((state) => ({ ...state, ...linkTrees }));
   }
   return render(Component, { props });
+}
+
+/**
+ * Menunggu editor Toast UI yang masih hidup (belum di-destroy) lalu mengembalikannya.
+ * Editor dimuat secara lazy, dan editor "sisa" dari test sebelumnya bisa ikut masuk ke
+ * daftar, jadi yang diambil adalah editor yang belum dihancurkan.
+ */
+export async function waitForEditor() {
+  let editor;
+  await waitFor(() => {
+    editor = globalThis.__toastEditors.find((item) => item.destroy.mock.calls.length === 0);
+    expect(editor).toBeDefined();
+  });
+  return editor;
 }
