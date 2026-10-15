@@ -26,10 +26,11 @@ describe("ChangeModal", () => {
     getLinkTree.mockResolvedValue({ ...linkTree, items: [] });
   });
 
-  it("terisi data link tree yang dipilih", () => {
+  it("terisi data link tree yang dipilih", async () => {
     renderWithProviders(ChangeModal, { props: { linkTree, onClose: vi.fn() } });
     expect(screen.getByLabelText("Judul")).toHaveValue("Lama");
     expect(screen.getByLabelText("Tipe")).toHaveValue("unlisted");
+    await waitFor(() => expect(globalThis.__toastEditors).toHaveLength(1));
     expect(globalThis.__toastEditors[0].options.initialValue).toBe("isi lama");
   });
 
@@ -44,6 +45,7 @@ describe("ChangeModal", () => {
     updateLinkTree.mockResolvedValue("ok");
     const onClose = vi.fn();
     renderWithProviders(ChangeModal, { props: { linkTree, onClose } });
+    await waitFor(() => expect(globalThis.__toastEditors).toHaveLength(1));
     globalThis.__toastEditors[0].options.events.change();
     await submitWith("Baru");
 

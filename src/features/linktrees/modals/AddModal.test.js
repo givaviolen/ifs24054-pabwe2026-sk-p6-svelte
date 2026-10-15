@@ -37,6 +37,7 @@ describe("AddModal", () => {
     renderWithProviders(AddModal, { props: { onClose } });
 
     await fireEvent.change(screen.getByLabelText("Tipe"), { target: { value: "private" } });
+    await waitFor(() => expect(globalThis.__toastEditors).toHaveLength(1));
     globalThis.__toastEditors[0].options.events.change();
     await submitWith("  Portofolio  ");
 

@@ -19,13 +19,13 @@ describe("toolsHelper", () => {
     expect(Swal.fire.mock.calls[2][0]).toMatchObject({ icon: "warning", text: "hati-hati" });
   });
 
-  it("dialog konfirmasi mengembalikan isConfirmed", async () => {
-    Swal.fire.mockResolvedValueOnce({ isConfirmed: true });
-    expect(await showConfirmDialog("Judul", "Teks", "Ya")).toBe(true);
-    expect(Swal.fire.mock.calls[0][0]).toMatchObject({ title: "Judul", confirmButtonText: "Ya" });
-
-    Swal.fire.mockResolvedValueOnce({ isConfirmed: false });
-    expect(await showConfirmDialog("Judul", "Teks", "Ya")).toBe(false);
+  it("menampilkan dialog sukses, error, dan peringatan", async () => {
+    await showSuccessDialog("ok");
+    await showErrorDialog("gagal");
+    await showWarningDialog("hati-hati");
+    expect(Swal.fire.mock.calls[0][0]).toMatchObject({ icon: "success", text: "ok" });
+    expect(Swal.fire.mock.calls[1][0]).toMatchObject({ icon: "error", text: "gagal" });
+    expect(Swal.fire.mock.calls[2][0]).toMatchObject({ icon: "warning", text: "hati-hati" });
   });
 
   it("memformat tanggal dan menangani nilai kosong", () => {
